@@ -1,48 +1,148 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, NavLink, Routes, Route } from "react-router-dom";
+
+import UploadMarks from "./UploadMarks";
+import Performance from "./Performance";
+import Stress from "./Stress";
+import StudyPlan from "./StudyPlan";
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState("");
 
-  // Safety check
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+        const parsedUser = JSON.parse(user);
+      setUserName(parsedUser.name);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
   return (
-    <div className="min-h-screen w-screen bg-slate-100 flex flex-col">
-      
-      {/* Header */}
-      <header className="  p-4 flex justify-between items-center">
-       
-        <h1 className="text-indigo-600 text-sm font-semibold text-center tracking-wide">
-          Edumate AI Dashboard
-        </h1>
-        <button
-          onClick={() => {
-            localStorage.removeItem("user");
-            navigate("/login");
-          }}
-          className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium"
-        >
-          Logout
-        </button>
-      </header>
+    <div className="flex min-h-screen w-full bg-white text-slate-800 font-sans">
 
-      {/* Content */}
-      <main className="flex-1 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
-          <h2 className="text-2xl font-bold">
-            Welcome, {user.name}
-          </h2>
-          <p className="text-slate-600 mt-2">
-            You are successfully logged in.
-          </p>
+      {/* Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`bg-white shadow-lg z-40 text-indigo-600 w-64 p-6 fixed md:static 
+        min-h-screen transition-transform duration-300 
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+        md:translate-x-0`}
+      >
+        {/* Header */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold">EduMate AI</h2>
+          {userName && (
+            <p className="text-sm text-black-500 mt-1">
+              Welcome, {userName}
+            </p>
+          )}
         </div>
-      </main>
+
+        <nav className="space-y-4">
+          <NavLink
+            to=""
+            className={({ isActive }) =>
+              `block p-2 rounded ${
+                isActive
+                  ? "text-indigo-600"
+                  : "hover:bg-slate-200 hover:text-indigo-600 transition"
+              }`
+            }
+          >
+            Upload Marks
+          </NavLink>
+
+          <NavLink
+            to="/dashboard/performance"
+            className={({ isActive }) =>
+              `block p-2 rounded ${
+                isActive
+                  ? "text-indigo-600"
+                  : "hover:bg-slate-200 hover:text-indigo-600 transition"
+              }`
+            }
+          >
+            Performance Analyse
+          </NavLink>
+
+          <NavLink
+            to="/dashboard/stress"
+            className={({ isActive }) =>
+              `block p-2 rounded ${
+                isActive
+                  ? "text-indigo-600"
+                  : "hover:bg-slate-200 hover:text-indigo-600 transition"
+              }`
+            }
+          >
+            Stress Analyse
+          </NavLink>
+
+          <NavLink
+            to="/dashboard/studyplan"
+            className={({ isActive }) =>
+              `block p-2 rounded ${
+                isActive
+                  ? "text-indigo-600"
+                  : "hover:bg-slate-200 hover:text-indigo-600 transition"
+              }`
+            }
+          >
+            Study Plan
+          </NavLink>
+        </nav>
+      </div>
+
+      {/* Main Section */}
+      <div className="flex-1 md:ml-64">
+        
+        {/* Desktop Top Bar */}
+        <div className="hidden md:flex justify-end p-4 border-b">
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-slate-200 transition"
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Mobile Navbar */}
+        <div className="md:hidden text-indigo-600 p-4 flex justify-between items-center border-b">
+          <button onClick={() => setIsOpen(!isOpen)}>☰</button>
+          <span className="font-bold">EduMate Dashboard</span>
+          <button
+            onClick={handleLogout}
+            className="px-3 py-1 bg-white text-indigo-600 border-indigo-600 rounded-md text-sm"
+          >
+            Logout
+          </button>
+        </div>
+
+        <div className="p-6">
+          <Routes>
+            <Route index element={<UploadMarks />} />
+            <Route path="performance" element={<Performance />} />
+            <Route path="stress" element={<Stress />} />
+            <Route path="studyplan" element={<StudyPlan />} />
+          </Routes>
+        </div>
+      </div>
     </div>
   );
 }

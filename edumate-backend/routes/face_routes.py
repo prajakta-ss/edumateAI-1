@@ -16,8 +16,6 @@ def face_register():
     email = data.get("email")
     image = data.get("image")
 
-    print("Image received:", image[:30] if image else "NO IMAGE")
-
     if not email or not image:
         return jsonify({"message": "Email and image required"}), 400
 
@@ -26,12 +24,22 @@ def face_register():
         return jsonify({"message": "No face detected"}), 400
 
     users = current_app.mongo.db.users
-    users.update_one(
+
+    result = users.update_one(
         {"email": email},
-        {"$set": {"face_embedding": embedding.tolist()}}
+        {
+            "$set": {
+                "face_embedding": embedding.tolist(),
+                "face_registered": True
+            }
+        }
     )
 
+    if result.matched_count == 0:
+        return jsonify({"message": "User not found. Please sign up first."}), 404
+
     return jsonify({"message": "Face registered successfully"}), 200
+
 
 
 # ===================== LOGIN =====================
@@ -44,15 +52,18 @@ def face_login():
     if embedding is None:
         return jsonify({"message": "No face detected"}), 400
 
+    print("LOGIN embedding shape:", embedding.shape)
+
     users = current_app.mongo.db.users
 
     for user in users.find({"face_embedding": {"$exists": True}}):
         stored = np.array(user["face_embedding"])
+        print("Stored embedding shape:", stored.shape)
 
-        #  Euclidean distance (MediaPipe way)
         distance = np.linalg.norm(stored - embedding)
+        print("Distance:", distance)
 
-        if distance < 0.9:  # threshold
+        if distance < 1.3:
             token = jwt.encode(
                 {
                     "email": user["email"],
@@ -66,8 +77,9 @@ def face_login():
                 "token": token,
                 "user": {
                     "email": user["email"],
-                    "name": user["name"]
+                    "name": user.get("name", "")
                 }
             }), 200
 
     return jsonify({"message": "Face not recognized"}), 401
+
