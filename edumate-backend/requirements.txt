@@ -6,3 +6,4 @@ python-dotenv
 face-recognition
 opencv-python
 numpy
+xgboost

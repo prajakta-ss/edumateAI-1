@@ -56,7 +56,7 @@ export default function Dashboard() {
 
         <nav className="space-y-4">
           <NavLink
-            to=""
+            to="/dashboard"
             className={({ isActive }) =>
               `block p-2 rounded ${
                 isActive
@@ -78,7 +78,7 @@ export default function Dashboard() {
               }`
             }
           >
-            Performance Analyse
+            Performance Analysis
           </NavLink>
 
           <NavLink
@@ -91,7 +91,7 @@ export default function Dashboard() {
               }`
             }
           >
-            Stress Analyse
+            Stress Analysis
           </NavLink>
 
           <NavLink

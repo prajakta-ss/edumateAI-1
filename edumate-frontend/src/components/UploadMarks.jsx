@@ -52,7 +52,7 @@ export default function UploadMarks() {
         {/* Upload Button */}
         <button
           onClick={handleUpload}
-          className="mt-6 w-full bg-indigo-600 text-indigo-600 py-2 rounded-lg 
+          className="mt-6 w-full text-indigo-600 py-2 rounded-lg 
           hover:bg-indigo-700 transition duration-200 font-medium"
         >
           Upload
