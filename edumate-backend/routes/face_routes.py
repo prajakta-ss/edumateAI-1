@@ -76,6 +76,7 @@ def face_login():
             return jsonify({
                 "token": token,
                 "user": {
+                    "_id": str(user["_id"]),  
                     "email": user["email"],
                     "name": user.get("name", "")
                 }

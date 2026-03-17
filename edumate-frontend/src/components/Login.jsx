@@ -65,28 +65,28 @@ export default function Login() {
 
         {/* MODE TOGGLE */}
         <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
-          <button
-            onClick={() => setMode("password")}
-            className={`w-1/2 py-2 rounded-lg font-medium transition ${
-              mode === "password"
-                ? "bg-white shadow text-indigo-600"
-                : "text-slate-500"
-            }`}
-          >
-            Password
-          </button>
-          <button
-            onClick={() => setMode("face")}
-            className={`w-1/2 py-2 rounded-lg font-medium transition ${
-              mode === "face"
-                ? "bg-white shadow text-indigo-600"
-                : "text-slate-500"
-            }`}
-          >
-            Face
-          </button>
-        </div>
+  <button
+    onClick={() => setMode("password")}
+    className={`flex-1 py-2 rounded-lg font-medium transition ${
+      mode === "password"
+        ? "bg-white shadow text-indigo-600"
+        : "text-slate-500"
+    }`}
+  >
+    Password
+  </button>
 
+  <button
+    onClick={() => setMode("face")}
+    className={`flex-1 py-2 rounded-lg font-medium transition ${
+      mode === "face"
+        ? "bg-white shadow text-indigo-600"
+        : "text-slate-500"
+    }`}
+  >
+    Face
+  </button>
+</div>
         {/* PASSWORD LOGIN */}
         {mode === "password" && (
           <form className="space-y-5" onSubmit={handleSubmit}>
