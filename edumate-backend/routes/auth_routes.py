@@ -51,6 +51,7 @@ def login():
         "message": "Login successful",
         "token": token,
         "user": {
+             "_id": str(user["_id"]),
             "name": user["name"],
             "email": user["email"]
         }

@@ -6,7 +6,7 @@ from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.face_routes import face_bp
 from routes.stress_routes import stress_bp
-
+from openai import OpenAI
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})

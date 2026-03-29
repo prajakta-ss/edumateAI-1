@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink, Routes, Route } from "react-router-dom";
-
+import api from "../api/axios";  
 import UploadMarks from "./UploadMarks";
 import Performance from "./Performance";
 import Stress from "./Stress";
@@ -19,6 +19,26 @@ export default function Dashboard() {
       setUserName(parsedUser.name);
     }
   }, []);
+  const [mode, setMode] = useState("ocr");
+
+  const [subjects, setSubjects] = useState([
+    { subject: "", credits: "" }
+  ]);
+
+  const handleChange = (index, field, value) => {
+    const updated = [...subjects];
+    updated[index][field] = value;
+    setSubjects(updated);
+  };
+
+  const addRow = () => {
+    setSubjects([...subjects, { subject: "", credits: "" }]);
+  };
+
+  const removeRow = (index) => {
+    const updated = subjects.filter((_, i) => i !== index);
+    setSubjects(updated);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -56,7 +76,7 @@ export default function Dashboard() {
 
         <nav className="space-y-4">
           <NavLink
-            to="/dashboard"
+            to="/dashboard/upload"   
             className={({ isActive }) =>
               `block p-2 rounded ${
                 isActive
@@ -65,7 +85,7 @@ export default function Dashboard() {
               }`
             }
           >
-            Upload Marks
+           Upload Marks
           </NavLink>
 
           <NavLink
@@ -135,12 +155,13 @@ export default function Dashboard() {
         </div>
 
         <div className="p-6">
-          <Routes>
-            <Route index element={<UploadMarks />} />
-            <Route path="performance" element={<Performance />} />
-            <Route path="stress" element={<Stress />} />
-            <Route path="studyplan" element={<StudyPlan />} />
-          </Routes>
+         <Route path="/dashboard" element={<Dashboard />}>
+          <Route index element={<UploadMarks />} />   {/* default */}
+          <Route path="upload" element={<UploadMarks />} />
+          <Route path="performance" element={<Performance />} />
+          <Route path="stress" element={<Stress />} />
+          <Route path="studyplan" element={<StudyPlan />} />
+        </Route>
         </div>
       </div>
     </div>
