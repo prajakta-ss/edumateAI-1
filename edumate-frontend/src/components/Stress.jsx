@@ -62,7 +62,7 @@ export default function Stress() {
     setAnswers(updated);
   };
 
-  // ✅ NEW: Planner Intelligence Builder
+  //  NEW: Planner Intelligence Builder
   const buildPlannerInsights = (answers) => {
     let insights = [];
 
@@ -156,7 +156,7 @@ export default function Stress() {
 
       setResult(data.stress_level);
 
-      // ✅ Merge backend + planner intelligence
+      //  Merge backend + planner intelligence
       const plannerInsights = buildPlannerInsights(answers);
       setAnalysis(data.analysis + " " + plannerInsights);
 
