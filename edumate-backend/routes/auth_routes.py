@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from models.user_model import hash_password, check_password
 from utils.jwt_utils import generate_token
+from extensions import mongo
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -11,11 +12,12 @@ def register():
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
+    face_enabled = data.get("enableFace", False)
 
     if not name or not email or not password:
         return jsonify({"message": "All fields are required"}), 400
 
-    users = current_app.mongo.db.users
+    users =mongo.db.users
 
     if users.find_one({"email": email}):
         return jsonify({"message": "User already exists"}), 400
@@ -23,7 +25,10 @@ def register():
     users.insert_one({
         "name": name,
         "email": email,
-        "password": hash_password(password)
+        "password": hash_password(password),  
+        "face_enabled": face_enabled,
+        "face_registered": False,
+        "face_embedding": []
     })
 
     return jsonify({"message": "Registration successful"}), 201
@@ -35,8 +40,8 @@ def login():
 
     email = data.get("email")
     password = data.get("password")
-
-    users = current_app.mongo.db.users
+    
+    users = mongo.db.users
     user = users.find_one({"email": email})
 
     if not user:

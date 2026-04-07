@@ -3,6 +3,7 @@ from flask_cors import cross_origin
 import numpy as np
 import jwt
 from datetime import datetime, timedelta
+from extensions import mongo
 
 from utils.face_utils import get_face_embedding  
 
@@ -23,7 +24,7 @@ def face_register():
     if embedding is None:
         return jsonify({"message": "No face detected"}), 400
 
-    users = current_app.mongo.db.users
+    users = mongo.db.users
 
     result = users.update_one(
         {"email": email},
@@ -54,7 +55,7 @@ def face_login():
 
     print("LOGIN embedding shape:", embedding.shape)
 
-    users = current_app.mongo.db.users
+    users = mongo.db.users
 
     for user in users.find({"face_embedding": {"$exists": True}}):
         stored = np.array(user["face_embedding"])

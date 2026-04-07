@@ -5,7 +5,7 @@ import UploadMarks from "./UploadMarks";
 import Performance from "./Performance";
 import Stress from "./Stress";
 import StudyPlan from "./StudyPlan";
-
+import { BrowserRouter} from "react-router-dom";
 export default function Dashboard() {
   const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -56,7 +56,7 @@ export default function Dashboard() {
           onClick={() => setIsOpen(false)}
         />
       )}
-
+        
       {/* Sidebar */}
       <div
         className={`bg-white shadow-lg z-40 text-indigo-600 w-64 p-6 fixed md:static 
@@ -154,15 +154,16 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="p-6">
-         <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<UploadMarks />} />   {/* default */}
-          <Route path="upload" element={<UploadMarks />} />
-          <Route path="performance" element={<Performance />} />
-          <Route path="stress" element={<Stress />} />
-          <Route path="studyplan" element={<StudyPlan />} />
-        </Route>
-        </div>
+        
+          <div className="p-6">
+            <Routes>
+              <Route index element={<UploadMarks />} />
+              <Route path="upload" element={<UploadMarks />} />
+              <Route path="performance" element={<Performance />} />
+              <Route path="stress" element={<Stress />} />
+              <Route path="studyplan" element={<StudyPlan />} />
+            </Routes>
+          </div>
       </div>
     </div>
   );

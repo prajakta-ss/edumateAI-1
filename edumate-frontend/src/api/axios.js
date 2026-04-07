@@ -18,4 +18,17 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Marks API endpoints
+export const saveMarks = (marksData) => {
+  return api.post("/performance/marks", { marks: marksData });
+};
+
+export const getMarks = () => {
+  return api.get("/performance/marks");
+};
+
+export const predictPerformance = (grades) => {
+  return api.post("/performance/predict", { grades });
+};
+
 export default api;

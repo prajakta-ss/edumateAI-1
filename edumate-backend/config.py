@@ -1,4 +1,4 @@
 class Config:
     SECRET_KEY = "super-secret-key-change-this"
-    MONGO_URI = "mongodb+srv://prajaktajshinde52_db_user:EdumateAi@cluster0.0lgmtlj.mongodb.net/edumate?retryWrites=true&w=majority"
+    MONGO_URI = "mongodb+srv://mememagicmime_db_user:wbSoU5dN8HfHAClx@cluster0.kalwwgr.mongodb.net/edumate?retryWrites=true&w=majority&tlsInsecure=true"
     JWT_SECRET = "jwt-secret-key"
